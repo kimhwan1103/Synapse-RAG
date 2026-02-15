@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  rag-db-server:
+    build:
+      context: .
+      dockerfile: src_server/Dockerfile
+    container_name: rag_brain
+    working_dir: /app
+    volumes:
+      - ./data:/app/data
+      - ./src_server:/app/src_server
+      - ./src_cpp:/app/src_cpp
+    command: uvicorn src_server.db_server_v2:app --host 0.0.0.0 --port 9000 --reload
+    #command: tail -f /dev/null
+    ports:
+      - "9000:9000"
+    networks:
+      - rag_net
+    restart: always
+
+  rag-learner:
+    build:
+      context: .
+      dockerfile: src_python/Dockerfile
+    container_name: rag_body
+    working_dir: /workspace
+    volumes:
+      - ./src_python:/workspace/src_python
+      - ./src_cpp:/workspace/src_cpp
+    command: tail -f /dev/null
+    networks:
+      - rag_net
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu] 
+
+networks:
+  rag_net:
+    driver: bridge

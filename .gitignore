@@ -1,0 +1,36 @@
+# Model weights
+weights/
+
+# Data (FAISS index, DB)
+data/
+
+# Training snapshots
+*.pt
+
+# Wiki dump
+*.xml.bz2
+
+# Build artifacts
+build/
+*.so
+*.o
+*.egg
+dist/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

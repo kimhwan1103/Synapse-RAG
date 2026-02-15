@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  inference-chat:
+    build: .
+    container_name: rag-inference-chat
+    volumes:
+      - ../data:/app/data
+      - ../src_python:/app/src_python
+      - ../weights:/app/weights
+    # 대화형 모드를 위해 tty 설정
+    stdin_open: true
+    networks:
+      - default
+      - old_network
+    tty: true
+    # 컨테이너가 꺼지지 않게 대기 (직접 접속해서 실행하기 위함)
+    command: tail -f /dev/null
+
+networks:
+  old_network:
+    external:
+      name: gnn_db_rag_net
